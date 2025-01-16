@@ -4,6 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Phone Number Generator</title>
+    <style>
+        /* Minified CSS for performance */
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        h1, h2 { font-size: 2em; }
+        form, #phone-numbers, iframe { margin-top: 20px; }
+        input[type="text"] { padding: 10px; margin: 10px 0; }
+        button { padding: 10px 20px; }
+    </style>
 </head>
 <body>
     <h1>Generate Phone Numbers</h1>
@@ -70,7 +78,10 @@
 
         function setupCSVDownload(phoneNumbers) {
             const downloadButton = document.getElementById('download-csv');
-            downloadButton.addEventListener('click', function() {
+            downloadButton.removeEventListener('click', handleCSVDownload); // Remove previous event listener to avoid multiple bindings
+            downloadButton.addEventListener('click', handleCSVDownload);
+
+            function handleCSVDownload() {
                 const csvContent = "data:text/csv;charset=utf-8," + phoneNumbers.join("\n");
                 const encodedUri = encodeURI(csvContent);
                 const link = document.createElement('a');
@@ -79,7 +90,7 @@
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
-            });
+            }
         }
 
         document.getElementById('search-form').addEventListener('submit', function(event) {
