@@ -54,6 +54,12 @@
             height: 2em;
         }
 
+        #result-description {
+            margin-top: 20px;
+            font-size: 1.2em;
+            color: #333;
+        }
+
         @media (max-width: 600px) {
             h1, h2 {
                 font-size: 1.5em;
@@ -76,6 +82,8 @@
     <h2>Generated Phone Numbers</h2>
     <div id="preview">Preview will appear here...</div>
     <ul id="phone-numbers"></ul>
+
+    <div id="result-description"></div>
 
     <button id="download-csv" style="display:none;">Download CSV</button>
 
@@ -106,6 +114,7 @@
             displayPhoneNumbers(phoneNumbers);
             setupCSVDownload(phoneNumbers);
             startPreviewAnimation(phoneNumbers);
+            showResultDescription(phoneNumbers.length);
         });
 
         function generatePhoneNumbers(areaCode) {
@@ -159,6 +168,11 @@
             }
 
             setInterval(updatePreview, 100); // Update every 100ms
+        }
+
+        function showResultDescription(amount) {
+            const resultDescription = document.getElementById('result-description');
+            resultDescription.textContent = `Generated ${amount.toLocaleString()} phone numbers.`;
         }
 
         document.getElementById('search-form').addEventListener('submit', function(event) {
