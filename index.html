@@ -5,78 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Phone Number Generator</title>
     <style>
-        body, html {
-            margin: 0;
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
             padding: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: url('preview-background.jpg') no-repeat center center fixed; /* Replace with your preview image */
-            background-size: cover;
-            font-family: 'Arial', sans-serif;
-        }
-
-        .overlay {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7); /* Semi-transparent overlay */
-            z-index: 1;
-        }
-
-        .login-container {
-            position: relative;
-            z-index: 2;
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
-            text-align: center;
-            width: 300px;
-        }
-
-        .login-container h1 {
-            margin-bottom: 20px;
-            color: #000;
-        }
-
-        .login-container input[type="email"] {
-            width: 80%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
-        .login-container button {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            background-color: #0088cc;
-            color: white;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s;
-        }
-
-        .login-container button:hover {
-            background-color: #005f8a;
-        }
-
-        .App {
-            display: none; /* Hide the main content initially */
-            text-align: center;
-            padding: 20px;
-        }
-
-        .App-header {
-            background-color: #1f1f1f;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-            color: #ffffff;
+            box-sizing: border-box;
         }
 
         h1, h2 {
@@ -161,66 +94,43 @@
     </style>
 </head>
 <body>
-    <div class="overlay"></div>
-    <div class="login-container">
-        <h1>Login</h1>
-        <form id="login-form" name="login" method="POST" data-netlify="true">
-            <input type="hidden" name="form-name" value="login">
-            <input type="email" name="email" placeholder="Enter your email" required>
-            <button type="submit">Submit</button>
-        </form>
+    <h1>Generate Phone Numbers</h1>
+    <form id="phone-form">
+        <label for="area-code">Enter Area Code:</label>
+        <input type="text" id="area-code" name="area-code" maxlength="3" required>
+        <button type="submit">Generate</button>
+    </form>
+
+    <h2>Generated Phone Numbers</h2>
+    <div id="phone-numbers-container">
+        <ul id="phone-numbers"></ul>
     </div>
 
-    <div class="App">
-        <header class="App-header">
-            <h1>High-Tech Phone Number Generator</h1>
-            <form id="phone-form">
-                <label for="area-code">Enter Area Code:</label>
-                <input type="text" id="area-code" name="area-code" maxlength="3" required>
-                <button type="submit">Generate</button>
-            </form>
+    <div id="result-description"></div>
 
-            <h2>Generated Phone Numbers</h2>
-            <div id="phone-numbers-container">
-                <ul id="phone-numbers"></ul>
-            </div>
+    <button id="download-csv" style="display:none;">Download CSV</button>
 
-            <div id="result-description"></div>
+    <h2>Search Bing</h2>
+    <form id="search-form">
+        <label for="search-query">Enter Search Query:</label>
+        <input type="text" id="search-query" name="search-query" required>
+        <button type="submit">Search</button>
+    </form>
 
-            <button id="download-csv" style="display:none;">Download CSV</button>
+    <h2>Search Results</h2>
+    <iframe id="search-results"></iframe>
 
-            <h2>Search Bing</h2>
-            <form id="search-form">
-                <label for="search-query">Enter Search Query:</label>
-                <input type="text" id="search-query" name="search-query" required>
-                <button type="submit">Search</button>
-            </form>
+    <h2>Upload CSV</h2>
+    <input type="file" id="upload-csv" accept=".csv">
+    <ul id="uploaded-phone-numbers"></ul>
 
-            <h2>Search Results</h2>
-            <iframe id="search-results"></iframe>
-
-            <h2>Upload CSV</h2>
-            <input type="file" id="upload-csv" accept=".csv">
-            <ul id="uploaded-phone-numbers"></ul>
-
-            <div id="contact">
-                <h2>Contact</h2>
-                <p>For further inquiries, please contact us on Telegram:</p>
-                <a class="telegram-button" href="https://t.me/dettacivilian" target="_blank" rel="noopener noreferrer">Telegram Contact</a>
-            </div>
-        </header>
+    <div id="contact">
+        <h2>Contact</h2>
+        <p>For further inquiries, please contact us on Telegram:</p>
+        <a class="telegram-button" href="https://t.me/dettacivilian" target="_blank">Telegram Contact</a>
     </div>
 
     <script>
-        document.getElementById('login-form').addEventListener('submit', function(event) {
-            event.preventDefault();
-            // Perform any additional validation or processing here if needed
-            document.querySelector('.login-container').style.display = 'none';
-            document.querySelector('.overlay').style.display = 'none';
-            document.querySelector('.App').style.display = 'block';
-            this.submit(); // Submit the form
-        });
-
         document.getElementById('phone-form').addEventListener('submit', function(event) {
             event.preventDefault();
             const areaCode = document.getElementById('area-code').value.trim();
