@@ -3,21 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Page</title>
+    <title>Phone Number Generator</title>
     <style>
-        body {
-            font-family: 'Roboto', sans-serif;
+        body, html {
             margin: 0;
             padding: 0;
+            width: 100%;
+            height: 100%;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
             background: url('preview-background.jpg') no-repeat center center fixed; /* Replace with your preview image */
             background-size: cover;
-            color: #ffffff;
+            font-family: 'Arial', sans-serif;
         }
-        
+
         .overlay {
             position: absolute;
             width: 100%;
@@ -64,6 +64,100 @@
         .login-container button:hover {
             background-color: #005f8a;
         }
+
+        .App {
+            display: none; /* Hide the main content initially */
+            text-align: center;
+            padding: 20px;
+        }
+
+        .App-header {
+            background-color: #1f1f1f;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            color: #ffffff;
+        }
+
+        h1, h2 {
+            font-size: 2em;
+            margin-top: 0;
+        }
+
+        form, iframe {
+            margin-top: 20px;
+        }
+
+        input[type="text"], button, input[type="file"] {
+            padding: 10px;
+            margin: 10px 0;
+            width: 100%;
+            max-width: 400px;
+            box-sizing: border-box;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        #phone-numbers-container {
+            max-height: 400px; /* Fixed height for scrollable container */
+            overflow-y: scroll; /* Enable vertical scrolling */
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-top: 20px;
+        }
+
+        ul {
+            padding: 0;
+            list-style-type: none;
+        }
+
+        li {
+            padding: 5px 0;
+        }
+
+        iframe {
+            width: 100%;
+            height: 500px;
+            border: none;
+        }
+
+        #result-description {
+            margin-top: 20px;
+            font-size: 1.2em;
+            color: #333;
+        }
+
+        #contact {
+            margin-top: 20px;
+        }
+
+        .telegram-button {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #0088cc;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .telegram-button:hover {
+            background-color: #005f8a;
+        }
+
+        @media (max-width: 600px) {
+            h1, h2 {
+                font-size: 1.5em;
+            }
+
+            input[type="text"], button, input[type="file"] {
+                width: 100%;
+            }
+        }
     </style>
 </head>
 <body>
@@ -77,12 +171,144 @@
         </form>
     </div>
 
+    <div class="App">
+        <header class="App-header">
+            <h1>High-Tech Phone Number Generator</h1>
+            <form id="phone-form">
+                <label for="area-code">Enter Area Code:</label>
+                <input type="text" id="area-code" name="area-code" maxlength="3" required>
+                <button type="submit">Generate</button>
+            </form>
+
+            <h2>Generated Phone Numbers</h2>
+            <div id="phone-numbers-container">
+                <ul id="phone-numbers"></ul>
+            </div>
+
+            <div id="result-description"></div>
+
+            <button id="download-csv" style="display:none;">Download CSV</button>
+
+            <h2>Search Bing</h2>
+            <form id="search-form">
+                <label for="search-query">Enter Search Query:</label>
+                <input type="text" id="search-query" name="search-query" required>
+                <button type="submit">Search</button>
+            </form>
+
+            <h2>Search Results</h2>
+            <iframe id="search-results"></iframe>
+
+            <h2>Upload CSV</h2>
+            <input type="file" id="upload-csv" accept=".csv">
+            <ul id="uploaded-phone-numbers"></ul>
+
+            <div id="contact">
+                <h2>Contact</h2>
+                <p>For further inquiries, please contact us on Telegram:</p>
+                <a class="telegram-button" href="https://t.me/dettacivilian" target="_blank" rel="noopener noreferrer">Telegram Contact</a>
+            </div>
+        </header>
+    </div>
+
     <script>
         document.getElementById('login-form').addEventListener('submit', function(event) {
             event.preventDefault();
             // Perform any additional validation or processing here if needed
+            document.querySelector('.login-container').style.display = 'none';
+            document.querySelector('.overlay').style.display = 'none';
+            document.querySelector('.App').style.display = 'block';
             this.submit(); // Submit the form
         });
+
+        document.getElementById('phone-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const areaCode = document.getElementById('area-code').value.trim();
+            if (areaCode.length !== 3 || isNaN(areaCode)) {
+                alert("Area code must be a 3-digit number.");
+                return;
+            }
+
+            const phoneNumbers = generatePhoneNumbers(areaCode);
+            displayPhoneNumbers(phoneNumbers.slice(0, 100)); // Display only the first 100 numbers
+            setupCSVDownload(phoneNumbers);
+            showResultDescription(phoneNumbers.length);
+        });
+
+        function generatePhoneNumbers(areaCode) {
+            const phoneNumbers = [];
+            for (let centralOfficeCode = 200; centralOfficeCode <= 299; centralOfficeCode++) {
+                for (let lineNumber = 0; lineNumber < 10000; lineNumber++) {
+                    const phoneNumber = `(${areaCode}) ${centralOfficeCode}-${lineNumber.toString().padStart(4, '0')}`;
+                    phoneNumbers.push(phoneNumber);
+                }
+            }
+            return phoneNumbers;
+        }
+
+        function displayPhoneNumbers(phoneNumbers) {
+            const phoneNumbersList = document.getElementById('phone-numbers');
+            phoneNumbersList.innerHTML = '';
+            phoneNumbers.forEach(number => {
+                const listItem = document.createElement('li');
+                listItem.textContent = number;
+                phoneNumbersList.appendChild(listItem);
+            });
+            document.getElementById('download-csv').style.display = 'block';
+        }
+
+        function setupCSVDownload(phoneNumbers) {
+            const downloadButton = document.getElementById('download-csv');
+            downloadButton.removeEventListener('click', handleCSVDownload); // Remove previous event listener to avoid multiple bindings
+            downloadButton.addEventListener('click', handleCSVDownload);
+
+            function handleCSVDownload() {
+                const csvContent = "data:text/csv;charset=utf-8," + phoneNumbers.join("\n");
+                const encodedUri = encodeURI(csvContent);
+                const link = document.createElement('a');
+                link.setAttribute('href', encodedUri);
+                link.setAttribute('download', 'phone_numbers.csv');
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+        }
+
+        function showResultDescription(amount) {
+            const resultDescription = document.getElementById('result-description');
+            resultDescription.textContent = `Generated ${amount.toLocaleString()} phone numbers.`;
+        }
+
+        document.getElementById('search-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const query = document.getElementById('search-query').value.trim();
+            if (query) {
+                document.getElementById('search-results').src = `https://www.bing.com/search?q=${encodeURIComponent(query)}`;
+            }
+        });
+
+        document.getElementById('upload-csv').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const contents = e.target.result;
+                    const phoneNumbers = contents.split('\n');
+                    displayUploadedPhoneNumbers(phoneNumbers);
+                };
+                reader.readAsText(file);
+            }
+        });
+
+        function displayUploadedPhoneNumbers(phoneNumbers) {
+            const uploadedPhoneNumbersList = document.getElementById('uploaded-phone-numbers');
+            uploadedPhoneNumbersList.innerHTML = '';
+            phoneNumbers.forEach(number => {
+                const listItem = document.createElement('li');
+                listItem.textContent = number;
+                uploadedPhoneNumbersList.appendChild(listItem);
+            });
+        }
     </script>
 </body>
 </html>
