@@ -114,15 +114,15 @@
             }
 
             const phoneNumbers = generatePhoneNumbers(areaCode);
-            displayPhoneNumbers(phoneNumbers);
+            displayPhoneNumbers(phoneNumbers.slice(0, 100)); // Display only the first 100 numbers
             setupCSVDownload(phoneNumbers);
             showResultDescription(phoneNumbers.length);
         });
 
         function generatePhoneNumbers(areaCode) {
             const phoneNumbers = [];
-            for (let centralOfficeCode = 200; centralOfficeCode <= 999; centralOfficeCode++) {
-                for (let lineNumber = 0; lineNumber <= 9999; lineNumber++) {
+            for (let centralOfficeCode = 200; centralOfficeCode <= 299; centralOfficeCode++) {
+                for (let lineNumber = 0; lineNumber < 10000; lineNumber++) {
                     const phoneNumber = `(${areaCode}) ${centralOfficeCode}-${lineNumber.toString().padStart(4, '0')}`;
                     phoneNumbers.push(phoneNumber);
                 }
