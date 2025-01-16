@@ -48,6 +48,12 @@
             border: none;
         }
 
+        #preview {
+            font-size: 1.5em;
+            margin: 20px 0;
+            height: 2em;
+        }
+
         @media (max-width: 600px) {
             h1, h2 {
                 font-size: 1.5em;
@@ -68,6 +74,7 @@
     </form>
 
     <h2>Generated Phone Numbers</h2>
+    <div id="preview">Preview will appear here...</div>
     <ul id="phone-numbers"></ul>
 
     <button id="download-csv" style="display:none;">Download CSV</button>
@@ -98,6 +105,7 @@
             const phoneNumbers = generatePhoneNumbers(areaCode);
             displayPhoneNumbers(phoneNumbers);
             setupCSVDownload(phoneNumbers);
+            startPreviewAnimation(phoneNumbers);
         });
 
         function generatePhoneNumbers(areaCode) {
@@ -137,6 +145,20 @@
                 link.click();
                 document.body.removeChild(link);
             }
+        }
+
+        function startPreviewAnimation(phoneNumbers) {
+            const preview = document.getElementById('preview');
+            let index = 0;
+            const subsetSize = 1000; // Adjust subset size for performance
+            const previewNumbers = phoneNumbers.slice(0, subsetSize);
+            
+            function updatePreview() {
+                preview.textContent = previewNumbers[index];
+                index = (index + 1) % previewNumbers.length;
+            }
+
+            setInterval(updatePreview, 100); // Update every 100ms
         }
 
         document.getElementById('search-form').addEventListener('submit', function(event) {
