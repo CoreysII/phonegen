@@ -21,36 +21,32 @@
     <script>
         document.getElementById('phone-form').addEventListener('submit', function(event) {
             event.preventDefault();
-            const areaCode = document.getElementById('area-code').value;
+            const areaCode = document.getElementById('area-code').value.trim();
             if (areaCode.length !== 3 || isNaN(areaCode)) {
                 alert("Area code must be a 3-digit number.");
                 return;
             }
 
-            const phoneNumbers = generatePhoneNumbers(areaCode, 100);
+            const phoneNumbers = generatePhoneNumbers(areaCode);
             displayPhoneNumbers(phoneNumbers);
             setupCSVDownload(phoneNumbers);
         });
 
-        function generatePhoneNumbers(areaCode, count) {
+        function generatePhoneNumbers(areaCode) {
             const phoneNumbers = [];
-            for (let i = 0; i < count; i++) {
-                const centralOfficeCode = getRandomInt(200, 999);
-                const lineNumber = getRandomInt(1000, 9999);
-                const phoneNumber = `(${areaCode}) ${centralOfficeCode}-${lineNumber}`;
-                phoneNumbers.push(phoneNumber);
+            for (let centralOfficeCode = 200; centralOfficeCode <= 999; centralOfficeCode++) {
+                for (let lineNumber = 0; lineNumber <= 9999; lineNumber++) {
+                    const phoneNumber = `(${areaCode}) ${centralOfficeCode}-${lineNumber.toString().padStart(4, '0')}`;
+                    phoneNumbers.push(phoneNumber);
+                }
             }
             return phoneNumbers;
-        }
-
-        function getRandomInt(min, max) {
-            return Math.floor(Math.random() * (max - min + 1)) + min;
         }
 
         function displayPhoneNumbers(phoneNumbers) {
             const phoneNumbersList = document.getElementById('phone-numbers');
             phoneNumbersList.innerHTML = '';
-            phoneNumbers.forEach(number => {
+            phoneNumbers.slice(0, 100).forEach(number => { // Display first 100 numbers for performance reasons
                 const listItem = document.createElement('li');
                 listItem.textContent = number;
                 phoneNumbersList.appendChild(listItem);
