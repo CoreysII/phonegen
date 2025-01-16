@@ -17,7 +17,7 @@
             margin-top: 0;
         }
 
-        form, #phone-numbers, iframe {
+        form, iframe {
             margin-top: 20px;
         }
 
@@ -33,6 +33,14 @@
             cursor: pointer;
         }
 
+        #phone-numbers-container {
+            max-height: 400px; /* Fixed height for scrollable container */
+            overflow-y: scroll; /* Enable vertical scrolling */
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-top: 20px;
+        }
+
         ul {
             padding: 0;
             list-style-type: none;
@@ -46,12 +54,6 @@
             width: 100%;
             height: 500px;
             border: none;
-        }
-
-        #preview {
-            font-size: 1.5em;
-            margin: 20px 0;
-            height: 2em;
         }
 
         #result-description {
@@ -80,8 +82,9 @@
     </form>
 
     <h2>Generated Phone Numbers</h2>
-    <div id="preview">Preview will appear here...</div>
-    <ul id="phone-numbers"></ul>
+    <div id="phone-numbers-container">
+        <ul id="phone-numbers"></ul>
+    </div>
 
     <div id="result-description"></div>
 
@@ -113,7 +116,6 @@
             const phoneNumbers = generatePhoneNumbers(areaCode);
             displayPhoneNumbers(phoneNumbers);
             setupCSVDownload(phoneNumbers);
-            startPreviewAnimation(phoneNumbers);
             showResultDescription(phoneNumbers.length);
         });
 
@@ -131,7 +133,7 @@
         function displayPhoneNumbers(phoneNumbers) {
             const phoneNumbersList = document.getElementById('phone-numbers');
             phoneNumbersList.innerHTML = '';
-            phoneNumbers.slice(0, 100).forEach(number => { // Display first 100 numbers for performance reasons
+            phoneNumbers.forEach(number => {
                 const listItem = document.createElement('li');
                 listItem.textContent = number;
                 phoneNumbersList.appendChild(listItem);
@@ -154,20 +156,6 @@
                 link.click();
                 document.body.removeChild(link);
             }
-        }
-
-        function startPreviewAnimation(phoneNumbers) {
-            const preview = document.getElementById('preview');
-            let index = 0;
-            const subsetSize = 1000; // Adjust subset size for performance
-            const previewNumbers = phoneNumbers.slice(0, subsetSize);
-            
-            function updatePreview() {
-                preview.textContent = previewNumbers[index];
-                index = (index + 1) % previewNumbers.length;
-            }
-
-            setInterval(updatePreview, 100); // Update every 100ms
         }
 
         function showResultDescription(amount) {
