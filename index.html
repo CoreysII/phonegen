@@ -62,6 +62,10 @@
             color: #333;
         }
 
+        #contact {
+            margin-top: 20px;
+        }
+
         @media (max-width: 600px) {
             h1, h2 {
                 font-size: 1.5em;
@@ -103,6 +107,12 @@
     <h2>Upload CSV</h2>
     <input type="file" id="upload-csv" accept=".csv">
     <ul id="uploaded-phone-numbers"></ul>
+
+    <div id="contact">
+        <h2>Contact</h2>
+        <p>For further inquiries, please contact us on Telegram:</p>
+        <a href="https://t.me/dettacivilian" target="_blank">Telegram Contact</a>
+    </div>
 
     <script>
         document.getElementById('phone-form').addEventListener('submit', function(event) {
