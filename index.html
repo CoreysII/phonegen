@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phone Number Generator</title>
+</head>
+<body>
+    <h1>Generate Phone Numbers</h1>
+    <form id="phone-form">
+        <label for="area-code">Enter Area Code:</label>
+        <input type="text" id="area-code" name="area-code" maxlength="3" required>
+        <button type="submit">Generate</button>
+    </form>
+
+    <h2>Generated Phone Numbers</h2>
+    <ul id="phone-numbers"></ul>
+
+    <button id="download-csv" style="display:none;">Download CSV</button>
+
+    <script>
+        document.getElementById('phone-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const areaCode = document.getElementById('area-code').value;
+            if (areaCode.length !== 3 || isNaN(areaCode)) {
+                alert("Area code must be a 3-digit number.");
+                return;
+            }
+
+            const phoneNumbers = generatePhoneNumbers(areaCode, 100);
+            displayPhoneNumbers(phoneNumbers);
+            setupCSVDownload(phoneNumbers);
+        });
+
+        function generatePhoneNumbers(areaCode, count) {
+            const phoneNumbers = [];
+            for (let i = 0; i < count; i++) {
+                const centralOfficeCode = getRandomInt(200, 999);
+                const lineNumber = getRandomInt(1000, 9999);
+                const phoneNumber = `(${areaCode}) ${centralOfficeCode}-${lineNumber}`;
+                phoneNumbers.push(phoneNumber);
+            }
+            return phoneNumbers;
+        }
+
+        function getRandomInt(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        function displayPhoneNumbers(phoneNumbers) {
+            const phoneNumbersList = document.getElementById('phone-numbers');
+            phoneNumbersList.innerHTML = '';
+            phoneNumbers.forEach(number => {
+                const listItem = document.createElement('li');
+                listItem.textContent = number;
+                phoneNumbersList.appendChild(listItem);
+            });
+            document.getElementById('download-csv').style.display = 'block';
+        }
+
+        function setupCSVDownload(phoneNumbers) {
+            const downloadButton = document.getElementById('download-csv');
+            downloadButton.addEventListener('click', function() {
+                const csvContent = "data:text/csv;charset=utf-8," + phoneNumbers.join("\n");
+                const encodedUri = encodeURI(csvContent);
+                const link = document.createElement('a');
+                link.setAttribute('href', encodedUri);
+                link.setAttribute('download', 'phone_numbers.csv');
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            });
+        }
+    </script>
+</body>
+</html>
