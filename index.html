@@ -25,7 +25,7 @@
             padding: 10px;
             margin: 10px 0;
             width: 100%;
-            max-width: 400px;
+            max-width: 120px;
             box-sizing: border-box;
         }
 
@@ -39,6 +39,14 @@
             border: 1px solid #ccc;
             padding: 10px;
             margin-top: 20px;
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .column {
+            flex: 1;
+            min-width: 200px;
+            margin-right: 20px;
         }
 
         ul {
@@ -87,6 +95,10 @@
                 font-size: 1.5em;
             }
 
+            #phone-numbers-container {
+                flex-direction: column;
+            }
+
             input[type="text"], button, input[type="file"] {
                 width: 100%;
             }
@@ -96,15 +108,15 @@
 <body>
     <h1>Generate Phone Numbers</h1>
     <form id="phone-form">
-        <label for="area-code">Enter Area Code:</label>
-        <input type="text" id="area-code" name="area-code" maxlength="3" required>
+        <label for="area-code-1">Enter Area Code:</label>
+        <input type="text" id="area-code-1" name="area-code-1" maxlength="1" required>
+        <input type="text" id="area-code-2" name="area-code-2" maxlength="1">
+        <input type="text" id="area-code-3" name="area-code-3" maxlength="1">
         <button type="submit">Generate</button>
     </form>
 
     <h2>Generated Phone Numbers</h2>
-    <div id="phone-numbers-container">
-        <ul id="phone-numbers"></ul>
-    </div>
+    <div id="phone-numbers-container"></div>
 
     <div id="result-description"></div>
 
@@ -133,14 +145,18 @@
     <script>
         document.getElementById('phone-form').addEventListener('submit', function(event) {
             event.preventDefault();
-            const areaCode = document.getElementById('area-code').value.trim();
-            if (areaCode.length !== 3 || isNaN(areaCode)) {
-                alert("Area code must be a 3-digit number.");
+            const areaCode1 = document.getElementById('area-code-1').value.trim();
+            const areaCode2 = document.getElementById('area-code-2').value.trim();
+            const areaCode3 = document.getElementById('area-code-3').value.trim();
+            const areaCode = areaCode1 + areaCode2 + areaCode3;
+
+            if (areaCode.length < 1 || isNaN(areaCode)) {
+                alert("The first area code field is required and must be a digit.");
                 return;
             }
 
             const phoneNumbers = generatePhoneNumbers(areaCode);
-            displayPhoneNumbers(phoneNumbers.slice(0, 100)); // Display only the first 100 numbers
+            displayPhoneNumbers(phoneNumbers.slice(0, 300)); // Display only the first 300 numbers
             setupCSVDownload(phoneNumbers);
             showResultDescription(phoneNumbers.length);
         });
@@ -157,13 +173,21 @@
         }
 
         function displayPhoneNumbers(phoneNumbers) {
-            const phoneNumbersList = document.getElementById('phone-numbers');
-            phoneNumbersList.innerHTML = '';
-            phoneNumbers.forEach(number => {
-                const listItem = document.createElement('li');
-                listItem.textContent = number;
-                phoneNumbersList.appendChild(listItem);
-            });
+            const phoneNumbersContainer = document.getElementById('phone-numbers-container');
+            phoneNumbersContainer.innerHTML = '';
+            const columns = Math.ceil(phoneNumbers.length / 100);
+            for (let i = 0; i < columns; i++) {
+                const column = document.createElement('div');
+                column.classList.add('column');
+                const ul = document.createElement('ul');
+                phoneNumbers.slice(i * 100, (i + 1) * 100).forEach(number => {
+                    const li = document.createElement('li');
+                    li.textContent = number;
+                    ul.appendChild(li);
+                });
+                column.appendChild(ul);
+                phoneNumbersContainer.appendChild(column);
+            }
             document.getElementById('download-csv').style.display = 'block';
         }
 
