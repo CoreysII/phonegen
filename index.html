@@ -4,17 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Phone Number Generator</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            padding: 0;
-            box-sizing: border-box;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
         }
 
         h1, h2 {
-            font-size: 2em;
+            font-size: 2.5em;
             margin-top: 0;
+            color: #007bff;
         }
 
         form, iframe {
@@ -35,10 +37,12 @@
 
         #phone-numbers-container {
             max-height: 400px;
-            overflow-y: auto; /* Enable vertical scrolling */
+            overflow-y: auto;
             border: 1px solid #ccc;
             padding: 10px;
             margin-top: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
         ul {
@@ -94,40 +98,47 @@
     </style>
 </head>
 <body>
-    <h1>Generate Phone Numbers</h1>
-    <form id="phone-form">
-        <label for="area-code">Enter Area Code:</label>
-        <input type="text" id="area-code" name="area-code" maxlength="3" pattern="\d{3}" required title="3-digit number only">
-        <button type="submit">Generate</button>
-    </form>
+    <div class="container mt-5">
+        <h1 class="text-center"><i class="fas fa-phone"></i> Generate Phone Numbers</h1>
+        <form id="phone-form" class="text-center">
+            <div class="form-group">
+                <label for="area-code">Enter Area Code:</label>
+                <input type="text" id="area-code" name="area-code" class="form-control" maxlength="3" pattern="\d{3}" required title="3-digit number only">
+            </div>
+            <button type="submit" class="btn btn-primary"><i class="fas fa-cogs"></i> Generate</button>
+        </form>
 
-    <h2>Generated Phone Numbers</h2>
-    <div id="phone-numbers-container">
-        <ul id="phone-numbers"></ul>
-    </div>
+        <h2 class="text-center mt-5"><i class="fas fa-list"></i> Generated Phone Numbers</h2>
+        <div id="phone-numbers-container" class="text-center">
+            <ul id="phone-numbers"></ul>
+        </div>
 
-    <div id="result-description"></div>
+        <div id="result-description" class="text-center mt-3"></div>
 
-    <button id="download-csv" style="display:none;">Download CSV</button>
+        <button id="download-csv" class="btn btn-success mt-3" style="display:none;">
+            <i class="fas fa-download"></i> Download CSV
+        </button>
 
-    <h2>Search Bing</h2>
-    <form id="search-form">
-        <label for="search-query">Enter Search Query:</label>
-        <input type="text" id="search-query" name="search-query" required>
-        <button type="submit">Search</button>
-    </form>
+        <h2 class="text-center mt-5"><i class="fas fa-search"></i> Search Bing</h2>
+        <form id="search-form" class="text-center">
+            <div class="form-group">
+                <label for="search-query">Enter Search Query:</label>
+                <input type="text" id="search-query" name="search-query" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-info"><i class="fas fa-search"></i> Search</button>
+        </form>
 
-    <h2>Search Results</h2>
-    <iframe id="search-results"></iframe>
+        <h2 class="text-center mt-5"><i class="fas fa-file-upload"></i> Upload CSV</h2>
+        <input type="file" id="upload-csv" class="form-control-file" accept=".csv">
+        <ul id="uploaded-phone-numbers" class="mt-3"></ul>
 
-    <h2>Upload CSV</h2>
-    <input type="file" id="upload-csv" accept=".csv">
-    <ul id="uploaded-phone-numbers"></ul>
-
-    <div id="contact">
-        <h2>Contact</h2>
-        <p>For further inquiries, please contact us on Telegram:</p>
-        <a class="telegram-button" href="https://t.me/dettacivilian" target="_blank" rel="noopener noreferrer">Telegram Contact</a>
+        <div id="contact" class="text-center mt-5">
+            <h2><i class="fas fa-envelope"></i> Contact</h2>
+            <p>For further inquiries, please contact us on Telegram:</p>
+            <a class="telegram-button" href="https://t.me/dettacivilian" target="_blank" rel="noopener noreferrer">
+                <i class="fab fa-telegram-plane"></i> Telegram Contact
+            </a>
+        </div>
     </div>
 
     <script>
@@ -220,5 +231,8 @@
             });
         }
     </script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
