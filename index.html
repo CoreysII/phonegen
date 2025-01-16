@@ -6,10 +6,23 @@
     <title>Phone Number Generator</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
             padding: 0;
-            box-sizing: border-box;
+            background: #0e0e0e;
+            color: #ffffff;
+        }
+
+        .App {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .App-header {
+            background-color: #1f1f1f;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
         }
 
         h1, h2 {
@@ -27,18 +40,33 @@
             width: 100%;
             max-width: 400px;
             box-sizing: border-box;
+            border: 1px solid #444;
+            border-radius: 5px;
+            background: #1f1f1f;
+            color: #ffffff;
         }
 
         button {
             cursor: pointer;
+            background: #0088cc;
+            border: none;
+            color: #ffffff;
+            font-size: 1em;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #005f8a;
         }
 
         #phone-numbers-container {
-            max-height: 400px; /* Fixed height for scrollable container */
-            overflow-y: scroll; /* Enable vertical scrolling */
-            border: 1px solid #ccc;
+            max-height: 400px;
+            overflow-y: scroll;
+            border: 1px solid #444;
             padding: 10px;
             margin-top: 20px;
+            background: #1f1f1f;
+            border-radius: 5px;
         }
 
         ul {
@@ -59,23 +87,20 @@
         #result-description {
             margin-top: 20px;
             font-size: 1.2em;
-            color: #333;
-        }
-
-        #contact {
-            margin-top: 20px;
+            color: #cccccc;
         }
 
         .telegram-button {
             display: inline-block;
             padding: 10px 20px;
             font-size: 16px;
-            color: #fff;
+            color: #ffffff;
             background-color: #0088cc;
             border: none;
             border-radius: 5px;
             text-decoration: none;
             text-align: center;
+            transition: background 0.3s;
         }
 
         .telegram-button:hover {
@@ -94,40 +119,24 @@
     </style>
 </head>
 <body>
-    <h1>Generate Phone Numbers</h1>
-    <form id="phone-form">
-        <label for="area-code">Enter Area Code:</label>
-        <input type="text" id="area-code" name="area-code" maxlength="3" required>
-        <button type="submit">Generate</button>
-    </form>
-
-    <h2>Generated Phone Numbers</h2>
-    <div id="phone-numbers-container">
-        <ul id="phone-numbers"></ul>
-    </div>
-
-    <div id="result-description"></div>
-
-    <button id="download-csv" style="display:none;">Download CSV</button>
-
-    <h2>Search Bing</h2>
-    <form id="search-form">
-        <label for="search-query">Enter Search Query:</label>
-        <input type="text" id="search-query" name="search-query" required>
-        <button type="submit">Search</button>
-    </form>
-
-    <h2>Search Results</h2>
-    <iframe id="search-results"></iframe>
-
-    <h2>Upload CSV</h2>
-    <input type="file" id="upload-csv" accept=".csv">
-    <ul id="uploaded-phone-numbers"></ul>
-
-    <div id="contact">
-        <h2>Contact</h2>
-        <p>For further inquiries, please contact us on Telegram:</p>
-        <a class="telegram-button" href="https://t.me/dettacivilian" target="_blank">Telegram Contact</a>
+    <div class="App">
+        <header class="App-header">
+            <h1>High-Tech Phone Number Generator</h1>
+            <form id="phone-form">
+                <label for="area-code">Enter Area Code:</label>
+                <input type="text" id="area-code" name="area-code" maxlength="3" required>
+                <button type="submit">Generate</button>
+            </form>
+            <h2>Generated Phone Numbers</h2>
+            <div id="phone-numbers-container">
+                <ul id="phone-numbers"></ul>
+            </div>
+            <div id="result-description"></div>
+            <button id="download-csv" style="display:none;">Download CSV</button>
+            <h2>Contact</h2>
+            <p>For further inquiries, please contact us on Telegram:</p>
+            <a class="telegram-button" href="https://t.me/dettacivilian" target="_blank" rel="noopener noreferrer">Telegram Contact</a>
+        </header>
     </div>
 
     <script>
@@ -187,37 +196,6 @@
         function showResultDescription(amount) {
             const resultDescription = document.getElementById('result-description');
             resultDescription.textContent = `Generated ${amount.toLocaleString()} phone numbers.`;
-        }
-
-        document.getElementById('search-form').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const query = document.getElementById('search-query').value.trim();
-            if (query) {
-                document.getElementById('search-results').src = `https://www.bing.com/search?q=${encodeURIComponent(query)}`;
-            }
-        });
-
-        document.getElementById('upload-csv').addEventListener('change', function(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const contents = e.target.result;
-                    const phoneNumbers = contents.split('\n');
-                    displayUploadedPhoneNumbers(phoneNumbers);
-                };
-                reader.readAsText(file);
-            }
-        });
-
-        function displayUploadedPhoneNumbers(phoneNumbers) {
-            const uploadedPhoneNumbersList = document.getElementById('uploaded-phone-numbers');
-            uploadedPhoneNumbersList.innerHTML = '';
-            phoneNumbers.forEach(number => {
-                const listItem = document.createElement('li');
-                listItem.textContent = number;
-                uploadedPhoneNumbersList.appendChild(listItem);
-            });
         }
     </script>
 </body>
