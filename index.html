@@ -34,8 +34,8 @@
         }
 
         #phone-numbers-container {
-            max-height: 400px; /* Fixed height for scrollable container */
-            overflow-y: scroll; /* Enable vertical scrolling */
+            max-height: 400px;
+            overflow-y: auto; /* Enable vertical scrolling */
             border: 1px solid #ccc;
             padding: 10px;
             margin-top: 20px;
@@ -97,7 +97,7 @@
     <h1>Generate Phone Numbers</h1>
     <form id="phone-form">
         <label for="area-code">Enter Area Code:</label>
-        <input type="text" id="area-code" name="area-code" maxlength="3" required>
+        <input type="text" id="area-code" name="area-code" maxlength="3" pattern="\d{3}" required title="3-digit number only">
         <button type="submit">Generate</button>
     </form>
 
@@ -127,7 +127,7 @@
     <div id="contact">
         <h2>Contact</h2>
         <p>For further inquiries, please contact us on Telegram:</p>
-        <a class="telegram-button" href="https://t.me/dettacivilian" target="_blank">Telegram Contact</a>
+        <a class="telegram-button" href="https://t.me/dettacivilian" target="_blank" rel="noopener noreferrer">Telegram Contact</a>
     </div>
 
     <script>
